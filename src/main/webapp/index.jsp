@@ -38,7 +38,7 @@
 			<div class="col mx-auto bg-primary p-0" id="hidden" style="max-width: 400px; height: 500px;"> 반응형사진 </div>
 			
 			<div class="col mx-auto p-0 m-0" style="max-width:400px; height:500px;">
-				<div class="row border p-0 m-0 d-flex justify-content-center" style="width:350px; height:400px;">
+				<div class="row border p-0 m-0 justify-content-center" style="width:350px; height:400px;">
 					<!-- 로고 -->
 					<div class="text-center pt-5" style="height:135px; width:100%">
 						<img style="width:175px; vertical-align:middle;" src="${ctp}/images/instagram_text.png"/>
@@ -74,6 +74,10 @@
 						</div>
 					</form>
 					<!-- 로그인폼끝 -->
+				</div>
+				<div class="row m-2">
+				</div>
+				<div class="row border p-0 m-0" style="width:350px; height:60px;">
 				</div>
 				
 			</div>
