@@ -13,29 +13,34 @@
 	<link rel="stylesheet" href="${ctp}/include/style.css">
 	<!---->
 	<style>
-		 	/* 435px 이상이면 body 상단여백이 200px */
-		@media ( min-width : 435px) {
+		 	/* 450px 이상이면 body 상단여백이 200px */
+		@media ( min-width : 450px) {
 			body {
 				margin-top: 200px;
 			}
 		}
-	    /* 860xp이하면 id="hidden"*/
+	    /* 875xp이하면 id="hidden"*/
 	    /* id="860px의 최대 넓이가 400px로 변경됩니다."*/
 		@media ( max-width : 875px) {
 			#hidden {
 				display: none;
 			}
-			#860px{
+			#875px{
 				max-width:400px;
 			}
+		}
+		#download:hover{
+			cursor:pointer;
 		}
 		
 	</style>
 </head>
 <body>
-	<div class="container-fluid p-0">
+	<div class="container-fluid p-0 justify-content-center">
 		<div class="row mx-auto p-0" id="875px" style="max-width:800px">
-			<div class="col mx-auto bg-primary p-0" id="hidden" style="max-width: 400px; height: 500px;"> 반응형사진 </div>
+			<div class="col mx-auto p-0 justify-content-center align-items-center " id="hidden" style="max-width: 400px; height: 500px;">
+				<img src="${ctp}/images/loginimg.png"/>
+			</div>
 			
 			<div class="col mx-auto p-0 m-0" style="max-width:400px; height:500px;">
 				<div class="row border p-0 m-0 justify-content-center" style="width:350px; height:400px;">
@@ -44,7 +49,7 @@
 						<img style="width:175px; vertical-align:middle;" src="${ctp}/images/instagram_text.png"/>
 					</div>
 					<!-- 로그인폼 -->
-					<form name="myform" id="myform" method="post" action="#.in">
+					<form name="myform" id="myform" method="post" action="memberLogin.mem">
 						<div class="mx-auto p-0 m-0" style="width:270px;">
 							<div class="row mx-auto p-0 mb-2">
 								<div class="col mx-auto p-0 m-0">
@@ -75,17 +80,25 @@
 					</form>
 					<!-- 로그인폼끝 -->
 				</div>
-				<div class="row m-2">
+				<div class="row m-2" style="width:350px;"></div>
+				<div class="row border p-0 m-0 justify-content-center align-items-center " style="width:350px; height:60px;">
+					<span> 계정이 없으신가요 ? <a href="#" class="text-primary"><b>가입하기</b></a> </span>
 				</div>
-				<div class="row border p-0 m-0" style="width:350px; height:60px;">
+				<div class="row m-2" style="width:350px;"></div>
+				<div class="row p-0 m-0 justify-content-center align-items-center" style="width:350px;">
+					<span>앱을 다운로드하세요</span>
 				</div>
-				
+				<div class="row m-2" style="width:350px;"></div>
+				<div class="row p-0 m-0 justify-content-center align-items-center" style="width:350px;">
+					<span class="mr-2"><img src="${ctp}/images/googlePlayLink.png" id="download" style="height:40px;"/></span>
+					<span><img src="${ctp}/images/msLink.png" id="download" style="height:40px;"/></span>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="container-fluid">
-		<div class="mx-auto mt-5 bg-primary" style="max-width:600px"> 정보란1 </div>
-		<div class="mx-auto bg-primary" style="max-width:600px"> 정보란2 </div>
+<!-- 		<div class="container-fluid">
+			<div class="mx-auto mt-5 bg-primary" style="max-width:600px"> 정보란1 </div>
+			<div class="mx-auto bg-primary" style="max-width:600px"> 정보란2 </div>
+		</div> -->
 	</div>
 </body>
 </html>
