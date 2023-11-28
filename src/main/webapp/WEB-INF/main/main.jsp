@@ -12,12 +12,15 @@
 	<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 	<jsp:include page="/include/style.jsp"/>
 	<!---->
+	<style>
+	/*스토리 뜨는곳 625px(고정), 포스트 올라가는 곳 470px(고정), 우측푸터는 385px(1160px미만일때 없어짐) */
+	</style>
 </head>
 <body>
 	<jsp:include page="/include/header.jsp"/>
 	<p><br/></p>
 	<div class="container">
-		
+		<div></div>
 	</div>
 	<p><br/></p>
 
