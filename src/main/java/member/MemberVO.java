@@ -4,16 +4,15 @@ public class MemberVO {
 	private int idx;
 	private String mid;
 	private String pwd;
-	private String nickName;
 	private String name;
 	private String email;
 	private String tel;
 	private String pr;
 	private String userInfor;
 	private String userDel;
-	private String post;
-	private String follow;
-	private String follower;
+	private int post;
+	private int follow;
+	private int follower;
 	
 	public int getIdx() {
 		return idx;
@@ -32,12 +31,6 @@ public class MemberVO {
 	}
 	public void setPwd(String pwd) {
 		this.pwd = pwd;
-	}
-	public String getNickName() {
-		return nickName;
-	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
 	}
 	public String getName() {
 		return name;
@@ -75,29 +68,29 @@ public class MemberVO {
 	public void setUserDel(String userDel) {
 		this.userDel = userDel;
 	}
-	public String getPost() {
+	public int getPost() {
 		return post;
 	}
-	public void setPost(String post) {
+	public void setPost(int post) {
 		this.post = post;
 	}
-	public String getFollow() {
+	public int getFollow() {
 		return follow;
 	}
-	public void setFollow(String follow) {
+	public void setFollow(int follow) {
 		this.follow = follow;
 	}
-	public String getFollower() {
+	public int getFollower() {
 		return follower;
 	}
-	public void setFollower(String follower) {
+	public void setFollower(int follower) {
 		this.follower = follower;
 	}
 	@Override
 	public String toString() {
-		return "MemberVO [idx=" + idx + ", mid=" + mid + ", pwd=" + pwd + ", nickName=" + nickName + ", name=" + name
-				+ ", email=" + email + ", tel=" + tel + ", pr=" + pr + ", userInfor=" + userInfor + ", userDel="
-				+ userDel + ", post=" + post + ", follow=" + follow + ", follower=" + follower + "]";
+		return "MemberVO [idx=" + idx + ", mid=" + mid + ", pwd=" + pwd + ", name=" + name + ", email=" + email
+				+ ", tel=" + tel + ", pr=" + pr + ", userInfor=" + userInfor + ", userDel=" + userDel + ", post=" + post
+				+ ", follow=" + follow + ", follower=" + follower + "]";
 	}
 	
 	

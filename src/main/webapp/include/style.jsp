@@ -1,10 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <style>
-
-
-
-
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 *{
     font-family: 'poppins', sans-serif;
     margin: 0;
@@ -15,6 +11,12 @@
 }
 body{
     letter-spacing: 0.5px;
+}
+footer {
+    position: fixed;
+    height: 50px;
+    bottom: 0;
+    width: 100%;
 }
 ::-webkit-scrollbar{
     width: 8px;
@@ -30,17 +32,23 @@ body{
 }
 .sidebar {
     position: fixed;
-    width: 300px;
+    width: 245px;
     height: 100vh;
     padding: 20;
     z-index: 1000;
-    background-color: grey;
-    border: 1;
+   /*  background-color: grey; */
+    border-right: 1px solid #ddd;
 }
 .logo img{
-    width:140px;
-    margin-top: 0.6rem;
-    margin-left: 1rem;
+	position:absolute;
+    width:105px;
+    margin-top: 2.3rem;
+    margin-left: 1.6rem;
+}
+.logoicon i{
+	position:absolute;
+    margin-top: 2rem;
+    margin-left: 1.6rem;
 }
 .profile{
     display: flex;
@@ -53,14 +61,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    border: 2px solid #e2336b;
+/*     border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    border: 2px solid #e2336b;  */
 }
 .profile-img img{
-    width: 70px;
-    height: 70px;
+    width: 25px;
+    height: 25px;
     object-fit: cover;
     border-radius: 50%;
     object-position: center;
@@ -78,6 +86,39 @@ body{
     width: 20px;
     object-fit: cover;
 }
+.navbar{
+	margin-top:100px;
+	width:100%;
+}
+.navbar-nav{
+	width:100%
+}
+.nav-item{
+	width:100%
+}
+.nav-item button{
+	background-color:white;
+	border:none;
+	height:45px;
+	width:97%;
+	margin: 0 auto;
+	margin-bottom:10px;
+}
+
+/*버튼 내부 폰트 사이즈*/
+
+.btntext{
+	font-size:11pt;
+}
+i {
+	font-size:22pt;
+}
+.sidebar .bottom-nav{
+	position:fixed;
+	bottom:0;
+	max-width: 245px;
+}
+/*hr태그안에 글쓰기*/
 .hr-sect {
 	display: flex;
 	flex-basis: 100%;
