@@ -1,4 +1,4 @@
-package member;
+package posting;
 
 import java.io.IOException;
 
@@ -10,18 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("serial")
-@WebServlet("*.in")
-public class MemberController extends HttpServlet{
+@WebServlet("*.po")
+public class PostingController extends HttpServlet{
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		MemberInterface command=null;
+		PostingInterface command=null;
 		String viewPage="/WEB-INF/main";
 		String com = request.getRequestURI();
 		com=com.substring(com.lastIndexOf("/"),com.lastIndexOf("."));
 		
 		HttpSession session =request.getSession();
 		String mid = session.getAttribute("sMid")==null? "" : (String)session.getAttribute("sMid");
-		
+		/*
 		if(com.equals("/log")) {
 			command=new MemberLoginCommand();
 			command.execute(request, response);
@@ -52,7 +52,7 @@ public class MemberController extends HttpServlet{
 			viewPage = "/include/message.jsp";
 			
 		} 
-		
+		*/
 		request.getRequestDispatcher(viewPage).forward(request, response);
 	}
 }

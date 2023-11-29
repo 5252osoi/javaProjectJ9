@@ -13,10 +13,11 @@ body{
     letter-spacing: 0.5px;
 }
 footer {
-    position: fixed;
+    position: absolute;
     height: 50px;
-    bottom: 0;
+    margin-top: 150px; 
     width: 100%;
+
 }
 ::-webkit-scrollbar{
     width: 8px;
@@ -30,6 +31,7 @@ footer {
 :root{
     --gradient: linear-gradient(to right, #e2336b, #fcac46);
 }
+
 .sidebar {
     position: fixed;
     width: 245px;
@@ -38,6 +40,10 @@ footer {
     z-index: 1000;
    /*  background-color: grey; */
     border-right: 1px solid #ddd;
+}
+.rightside{
+	width:300px;
+	margin-left:85px;
 }
 .logo img{
 	position:absolute;
@@ -137,6 +143,301 @@ i {
 	line-height: 0px;
 	margin: 0px 16px;
 }
+/*글작성시 모달창css*/
+.modal-dialog,
+.modal-content {
+	height:80vh;
+}
+/*모달창css끝*/
+.modal-body {
+    /* 100% = dialog height, 120px = header + footer */
+    max-height: calc(100% - 55px);
+}
+.modaltable{
+	height:100%;
+}
+/*메인화면css*/
 
+.main {
+    width: 100%;
+    padding: 40px 0;
+    margin-left:45px;
+    display: flex;
+    justify-content: center;
+    margin-left: 50px; 
+}
+
+.wrapper {
+    width: 70%;
+    max-width: 1000px;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-gap: 20px;
+    margin:0 auto;
+}
+
+.left-col {
+    display: flex;
+    flex-direction: column;
+    margin:0 auto;
+}
+
+.status-wrapper {
+    width: 600px;
+    height: 120px;
+    background: #fff;
+   /*  border: 1px solid #dfdfdf;
+    border-radius: 10px; */
+    padding: 10px;
+    padding-right: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    overflow-x: auto;
+    margin: 0 auto;
+}
+
+.status-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.status-card {
+    flex: 0 0 auto;
+    width: 70px;
+    max-width: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    padding: 3px;
+    background: linear-gradient(45deg, rgb(255, 230, 0), rgb(255, 0, 128) 80%);
+}
+
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.username {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 5px;
+    color: rgba(0, 0, 0, 0.5);
+}
+/* Story Section End */
+
+/* Post Section Start */
+.post  {
+    width: 100%;
+    max-width:470px;
+    height: auto;
+    background: #fff;
+   /*  border: 1px solid #dfdfdf; */
+    margin-top: 20px;
+    margin: 0 auto;
+}
+
+.info{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.info .username {
+    width: auto;
+    font-weight: bold;
+    color: #000;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.info .options {
+    height: 10px;
+    cursor: pointer;
+}
+
+.info .user {
+    display: flex;
+    align-items: center;
+}
+
+.info .profile-pic {
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    background: none;
+}
+
+.info .profile-pic img{
+    border: none;
+}
+
+.post-image{
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.post-content{
+    width: 100%;
+    padding: 20px;
+}
+
+.likes{
+    font-weight: bold;
+}
+
+.description{
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.description span{
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.post-time{
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 12px;
+}
+
+.comment-wrapper{
+    width: 100%;
+    height: 50px;
+    border-radius: 1px solid #dfdfdf;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-wrapper .icon{
+    height: 30px;
+}
+
+.comment-box{
+    width: 80%;
+    height: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.comment-btn,
+.action-btn{
+    width: 70px;
+    height: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    text-transform: capitalize;
+    font-size: 16px;
+    color: rgb(0, 162, 255);
+    opacity: 0.5;
+}
+
+.reaction-wrapper{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    margin-top: -20px;
+    align-items: center;
+}
+
+.reaction-wrapper .icon{
+    height: 25px;
+    margin: 0;
+    margin-right: 20px;
+}
+
+.reaction-wrapper .icon.save{
+    margin-left: auto;
+}
+
+.post2  {
+    width: 100%;
+    height: auto;
+    background: #fff;
+    border: 1px solid #dfdfdf;
+    margin-top: 10px;
+}
+/* Post Section End */
+
+
+/* Sidebar Section Start */
+.right-col{
+    padding: 20px;
+    width:300px;
+}
+
+.profile-card{
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-card .profile-pic{
+    flex: 0 0 auto;
+    padding: 0;
+    background: none;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.profile-card:first-child .profile-pic{
+    width: 70px;
+    height: 70px;
+}
+
+.profile-card .profile-pic img{
+    border: none;
+}
+
+.profile-card .username{
+    font-weight: 500;
+    font-size: 14px;
+    color: #000;
+    text-align: start;
+}
+
+.sub-text{
+    color: rgba(0, 0, 0, 0.5);
+    font-size:12px;
+    font-weight: 500;
+    margin-top: -10px;
+}
+
+.action-btn{
+    opacity: 1;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.suggestion-text{
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    margin: 20px 0;
+}
 
 </style>

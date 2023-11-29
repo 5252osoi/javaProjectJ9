@@ -10,6 +10,9 @@
 <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <jsp:include page="/include/style.jsp"/>
 <!---->
+<script>
+
+</script>
 <style>
 	.logoicon{
 		display:none;
@@ -40,17 +43,17 @@
 
 </style>
 	<div class="sidebar">
-		<a href="#" class="logo">
-			<img src="${ctp}/images/instagram_text.png" alt="logo">
+		<a href="ma.in" class="logo">
+			<img src="${ctp}/images/instagram_text.png" alt="logo" title="instagram(clone)"">
 		</a>
-		<a href="#" class="logoicon">
+		<a href="ma.in" class="logoicon" title="instagram(clone)">
 			<i class="ri-instagram-line" ></i>
 		</a>
 		
 		<nav class="navbar">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<button type="button" title="홈" class="nav-link btn btn-light d-inline-flex align-items-center">
+					<button type="button" title="홈으로" onclick="location.href='ma.in';" class="nav-link btn btn-light d-inline-flex align-items-center">
 						<i class="ri-home-5-fill ml-2"></i><span class="btntext ml-2">홈</span>
 					</button>
 				</li>
@@ -80,7 +83,7 @@
 					</button>
 				</li>
 				<li class="nav-item">
-					<button type="button" title="만들기" class="nav-link btn btn-light d-inline-flex align-items-center">
+					<button type="button" title="만들기" id="posting" data-toggle="modal" data-target="#post-add-modal" class="nav-link btn btn-light d-inline-flex align-items-center">
 						<i class="ri-add-box-line ml-2"></i><span class="btntext ml-2">만들기</span>
 					</button>
 				</li>
@@ -113,7 +116,7 @@
 		<nav class="navbar bottom-nav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<button type="button" title="로그아웃" class="nav-link btn btn-light d-inline-flex align-items-center">
+					<button type="button" onclick="location.href='logout.in';" title="로그아웃" class="nav-link btn btn-light d-inline-flex align-items-center">
 						<i class="ri-logout-box-line ml-2"></i><span class="btntext ml-2">로그아웃</span>
 					</button>
 				</li>
