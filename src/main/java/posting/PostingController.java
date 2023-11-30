@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 @SuppressWarnings("serial")
 @WebServlet("*.po")
 public class PostingController extends HttpServlet{
@@ -21,12 +22,14 @@ public class PostingController extends HttpServlet{
 		
 		HttpSession session =request.getSession();
 		String mid = session.getAttribute("sMid")==null? "" : (String)session.getAttribute("sMid");
+		
+		if(com.equals("/postUpload")){
+		command=new PostUploadCommand();
+		command.execute(request, response);
+		viewPage = "/include/message.jsp";
+		}
+		
 		/*
-		if(com.equals("/log")) {
-			command=new MemberLoginCommand();
-			command.execute(request, response);
-			viewPage = "/include/message.jsp";
-			
 		} else if(mid.equals("")) {
 			request.getRequestDispatcher("/").forward(request, response);
 			

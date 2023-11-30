@@ -28,7 +28,7 @@ public class MemberController extends HttpServlet{
 			viewPage = "/include/message.jsp";
 			
 		} else if(mid.equals("")) {
-			request.getRequestDispatcher("/").forward(request, response);
+			viewPage = request.getContextPath()+"/";
 			
 		} else if(com.equals("/ma")){
 			viewPage +="/main.jsp";
@@ -50,7 +50,7 @@ public class MemberController extends HttpServlet{
 			command=new MemberLogoutCommand();
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
-			
+
 		} 
 		
 		request.getRequestDispatcher(viewPage).forward(request, response);

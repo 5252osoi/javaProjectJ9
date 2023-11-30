@@ -14,56 +14,86 @@
 	<!---->
 	<script>
 		'use strict';
-		let cnt=1;
-		function fCheck() {
-	    	let fName1 = document.getElementById("fName1").value;
-	    	let title = $("#title").val();
-	    	let pwd = $("#pwd").val();
-	    	let maxSize = 1024 * 1024 * 30;   // 전체 30MByte 제한
+	    function fCheck() {
+	    	let fName = document.getElementById("file").value;
+	    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+	    	let maxSize = 1024 * 1024 * 30;   // 1KByte=1024Byte=10^3Byte=2^10Byte, 1MByte=2^20Byte=10^6Byte, 1GByte=2^30Byte=10^9Byte, 1TByte=2^40Byte=10^12Byte)
 	    	
-	    	if(fName1.trim() == "") {
+	    	if(fName.trim() == "") {
 	    		alert("업로드할 파일을 선택하세요!");
 	    		return false;
 	    	}
-	    	else if(title.trim() == "") {
-	    		alert("업로드할 파일의 제목을 입력하세요");
-	    		return false;
-	    	}
-	    	else if(pwd.trim() == "") {
-	    		alert("비밀번호를 입력하세요");
-	    		return false;
-	    	}
 	    	
-	    	// 파일 사이즈 처리
-	    	let fileSize = 0;
+	    	let fileSize = document.getElementById("file").files[0].size;
 	    	
-	    	for(let i=1; i<=cnt; i++) {
-	    		let imsiName = 'fName' + i;
-	    		if(isNaN(document.getElementById(imsiName))) {
-	    			let fName = document.getElementById(imsiName).value;
-		    		if(fName != "") {
-		    			fileSize += document.getElementById(imsiName).files[0].size;
-		    			let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
-				    	if(ext != 'jpg' && ext != 'gif' && ext != 'png') {
-				    		alert("업로드 가능한 파일은 'jpg/gif/png' 만 가능합니다.");
-				    		return false;
-				    	}
-		    		}
-	    		}
+	    	$('#fileSize').val(fileSize);
+	    	
+	    	if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'zip' && ext != 'hwp' && ext != 'ppt' && ext != 'pptx' && ext != 'xlsx') {
+	    		alert("업로드 가능한 파일은 'jgp/gif/png/zip/hwp/ppt/pptx/xlsx' 만 가능합니다.");
 	    	}
-	    	if(fileSize > maxSize) {
+	    	else if(fileSize > maxSize) {
 	    		alert("업로드할 파일의 최대용량은 30MByte입니다.");
-	    		return false;
-	    	} else {
-	    		myform.fileSize.value = fileSize;
-	    		alert("파일 사이즈 : " + fileSize);
+	    	}
+	    	else {
 	    		myform.submit();
 	    	}
 	    	
 	    }
+		
+
+		//모달 내부에서 파일넣기 버튼을 누르면 hidden속에있는 파일 버튼넣어짐
 		function clickFilebtn(){
-			document.getElementById('formFileMultiple').click();
+			document.getElementById('file').click();
 		}
+		
+		//모달창이 닫힐때 안에 있는 내용 초기화하기(새로고침)
+		$(document).ready(function(){
+			$('.modal').on('hidden.bs.modal', function () {
+				location.reload();
+			});
+		});
+		
+		//파일을 넣으면 모달창에 이미지 띄우기
+	    $(function(){
+	    	$("#file").on("change", function(e){
+	    		// 그림파일 체크
+	    		let files = e.target.files;
+	    		let filesArr = Array.prototype.slice.call(files);
+	    		
+	    		//console.log('filesArr',filesArr);
+	    		
+	    		filesArr.forEach(function(f){
+	    			if(!f.type.match("image.*")) {
+	    				alert("업로드할 파일은 이미지파일만 가능합니다.");
+	    			}
+	    		});
+	    		
+	    		// 멀티파일 이미지 미리보기
+	    		let i = e.target.files.length;
+	    		//들어온 파일의 갯수가 null이 아니면 #modalDemo안의 내용을 지우고 다시 출력
+	    		if(i!=null){
+					let strDemo='';
+	    			strDemo+='<div class="w3-content w3-display-container d-inline-flex align-items-center" style="overflow:auto; height:655px;"> ';
+	    			strDemo+='<div class="w-100 h-100" id="mdlDemo" >';
+	    			strDemo+='</div>';
+	    			strDemo+='</div>';
+	    			
+	    			$('#modalDemo').html(strDemo);
+	    			
+		    		for(let image of files) {
+						let img = document.createElement("img");
+		    			let reader = new FileReader();
+		    			reader.onload = function(e) {
+		    				img.setAttribute("src", e.target.result);
+		    				img.setAttribute("width", 200);
+		    			}
+		    			reader.readAsDataURL(e.target.files[--i]);
+		    			document.querySelector("#mdlDemo").append(img);
+		    		}
+	    		}
+	    	});
+	    });
+	    
 	</script>
 	<style>
 	/*스토리 뜨는곳 625px(고정), 포스트 올라가는 곳 470px(고정), 우측푸터는 300px(1160px미만일때 없어짐,좌측 마진으로 고정됨) */
@@ -231,10 +261,10 @@
     </section>
     <!-- right Sidebar Section End -->
     
-    <!-- create Post Modal Start --> 
+    <!-- 게시글을 등록하기위한 첫 모달창(이미지 입력) --> 
     <div class="modal fade " id="post-add-modal">
         <span>
-	        <button type="button" class="close m-4" data-dismiss="modal"><font size="15pt" color="#fff">&times;</font></button>
+	        <button type="button" class="close m-4 modal_close" data-dismiss="modal"><font size="15pt" color="#fff">&times;</font></button>
         </span>
         <div class="modal-dialog modal-xl modal-dialog-centered rounded-3">
             <div class="modal-content">
@@ -243,7 +273,7 @@
             	</div>
             	<!-- 모달내부에서 폼 입력하기 -->
                 <div class="modal-body">
-                    <form id="myform">
+                    <form id="myform" method="post" action="postUpload.po" enctype="multipart/form-data">
                     	<table class="table table-borderless modaltable w-100 h-100">
                     		<tr class="h-100">
                     			<td class="col-8 h-100">
@@ -253,8 +283,8 @@
 			                    		</div>
 										<p><font size="5pt">사진 파일을 여기에 업로드하세요</font></p>
 			                    		<input type="button" style="width:135px;" class="btn btn-primary btn-sm mx-auto" onclick="clickFilebtn()" value="컴퓨터에서 선택" />
-										<input style="display:none;" type="file" value="컴퓨터에서 선택" id="formFileMultiple" multiple>
 									</div>
+									<input style="display:none;" type="file" value="컴퓨터에서 선택" name="fName" id="file" multiple/>
                     			</td>
                     			<td class="col-4">
                     				<div class="profile-card">
@@ -264,11 +294,15 @@
 						                <div>
 						                    <p class="username">${sMid}</p>
 						                    <p class="sub-text">${sName}</p>
+						                    <input type="hidden" id="mid" value="${sMid}"/>
+						                    <input type="hidden" id="name" value="${sName}"/>
+						                    <input type="hidden" id="fileSize" name="fileSize"/>
+						                    <input type="hidden" id="hostIp" name="hostIp" value="${pageContext.request.remoteAddr}"/>
 						                </div>
 						            </div>
 		                    		<textarea rows="10" name="content" id="content" placeholder="내용을 입력하세요..." class="form-control" style="resize:none; border:none;"></textarea>
 		                            <div class="hr-sect"><b>준비되셨나요?</b></div>
-		                            <button type="button" class="btn btn-light float-right d-inline-flex align-items-center" ><i class="ri-upload-2-fill" title="게시하기"></i><span class="btntext ml-2">게시하기</span></button>
+		                            <button type="button" onclick="fCheck()" class="btn btn-light float-right d-inline-flex align-items-center"><i class="ri-upload-2-fill" title="게시하기"></i><span class="btntext ml-2">게시하기</span></button>
                     			</td>
                     		</tr>
                     	</table>
