@@ -38,9 +38,13 @@ public class PostingController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
 			
-			
 		} else if(com.equals("/postDelete")){
 			command=new PostdeleteCommand();
+			command.execute(request, response);
+			return;
+			
+		} else if(com.equals("/postReplyInput")){
+			command=new PostReplyInputCommand();
 			command.execute(request, response);
 			return;
 			

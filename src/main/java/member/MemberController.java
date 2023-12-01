@@ -28,32 +28,32 @@ public class MemberController extends HttpServlet{
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
 			
-		} else if(mid.equals("")) {
-			viewPage ="/index.jsp";
-			
-		} else if(com.equals("/ma")){
-			command=new MainPagingCommand();
-			command.execute(request, response);
-			viewPage ="/mainPage/main.jsp";
-			
 		} else if(com.equals("/jo")){
 			viewPage +="/join.jsp";
-			
-		} else if(com.equals("/idCheck")){
-			command=new IdCheckCommand();
-			command.execute(request, response);
-			return;
 			
 		} else if(com.equals("/memberJo")){
 			command=new MemberJoinCommand();
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
 			
+		} else if(com.equals("/idCheck")){
+			command=new IdCheckCommand();
+			command.execute(request, response);
+			return;
+			
+			//세션에서 로그아웃되어있으면 로그인페이지로
+		} else if(mid.equals("")||mid.equals(null)) {	
+			viewPage ="/index.jsp";
+			
+		} else if(com.equals("/ma")){
+			command=new MainPagingCommand();
+			command.execute(request, response);
+			viewPage ="/mainPage/main.jsp";
+
 		} else if(com.equals("/logout")){
 			command=new MemberLogoutCommand();
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
-
 		} 
 		
 		request.getRequestDispatcher(viewPage).forward(request, response);

@@ -171,23 +171,21 @@
 	    }
 	    
 	    //댓글달기
-	    function replyCheck() {
-	    	let content = $(".comment-box").val();
+ 	    function replyCheck(idx) {
+	    	let content = $("#comment"+idx).val();
 	    	if(content.trim() == "") {
-	    		alert("댓글을 입력하세요!");
-	    		$("#content").focus();
+	    		alert("댓글을 입력하세요");
+	    		$("#comment"+idx).focus();
 	    		return false;
 	    	}
 	    	let query = {
-	    			boardIdx  : ${vo.idx},
-	    			mid				: '${sMid}',
-	    			nickName	: '${sNickName}',
+	    			postIdx  	: idx,
+	    			mid			: '${sMid}',
 	    			hostIp		: '${pageContext.request.remoteAddr}',
 	    			content		: content
 	    	}
-	    	
 	    	$.ajax({
-	    		url  : "boardReplyInput.bo",
+	    		url  : "postReplyInput.po",
 	    		type : "post",
 	    		data : query,
 	    		success:function(res) {
@@ -196,14 +194,14 @@
 	    				location.reload();
 	    			}
 	    			else {
-	    				alert("댓글 입력 실패~~");
+	    				alert("댓글 입력 실패");
 	    			}
 	    		},
 	    		error : function() {
 	    			alert("전송오류!!");
 	    		}
 	    	});
-	    }
+	    } 
 	    
 	</script>
 	<style>
@@ -270,14 +268,14 @@
 				                    <div class="profile-pic">
 				                        <img src="${ctp}/images/noprofile.png" alt="photo">
 				                    </div>
-				                    <p class="username">${vo.mid}</p>
+				                    <p class="username"><a href="#">${vo.mid}</a></p>
 				                </div>
 				                <!-- 작성자아이디 = 세션아이디 일때 수정,삭제기능 -->
 				                <c:if test="${sMid==vo.mid || sMid=='admin'}">
-					                <div class="dropdown dropright">
-					                    <button class="btn btn-main btn-light btn-sm dropdown-toggle" data-toggle="dropdown">
+					                <div class="dropdown">
+					                    <a class="dropdown-toggle" data-toggle="dropdown">
 					                        <i class="ri-more-fill m-0 p-0"></i>
-					                    </button>
+					                    </a>
 					                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"  style="width:50px;">
 					                    	<c:if test="${sMid==vo.mid}">
 							                    <li><button data-toggle="modal" data-target="#edit-modal" onclick="editPost('${vo.idx}','${vo.content}')" class="dropdown-item post_edit">수정</button></li>
@@ -297,17 +295,28 @@
 					                <button class="btn btn-sm btn-light btn-main ml-auto"><i class="ri-bookmark-line m-1"></i></button>
 				                </div>
 				                <p class="likes text-start"><c:if test="${vo.likes!=0}">좋아요 ${vo.likes}개</c:if></p>
-				                <p class="description">${fn:replace(vo.content,newLine,'<br/>')}</p>
-				                <p class="post-time"></p>
+					            <span class="description">
+					            	<a href="#"><b>${vo.mid}</b></a>
+					            	${fn:replace(vo.content,newLine,'<br/>')}
+					            </span>
+				                <p class="post-time">${fn:substring(vo.wDate,0,11)}</p>
 				            </div>
+				            <!-- 댓글은 해당 글의 idx와 댓글VO의 postIdx가 같으면 출력되게끔 작성 -->
+			            	<c:forEach var="rVo" items="${rVos}">
+			            		<c:if test="${rVo.postIdx==vo.idx}">
+			            		<!-- 댓글 -->
+				            		<div class="description col-12">
+			            				<a href="#"><b>${rVo.mid}</b></a>
+			            				${fn:replace(rVo.content,newLine,'<br/>')}
+				            		</div>
+			            		</c:if>
+			            	</c:forEach>
+				            	<!-- 댓글입력 -->
 				            <div class="comment-wrapper">
-				                <img src="#" class="icon" alt="">
-				                <form name="comment-form">
-					                <input type="text" class="comment-box" placeholder="댓글 달기...">
-					                <button class="comment-btn" onclick="replyCheck(${vo.idx})"><b>게시</b></button>
-				                </form>
+					            <input type="text" class="comment-box" id="comment${vo.idx}" placeholder="댓글 달기...">
+					            <button class="comment-btn" onclick="replyCheck(${vo.idx})"><b>게시</b></button>
 				            </div>
-			        		<hr/>
+			        		<hr class="mt-0"/>
 			        	</div>
                 	</c:forEach>
 		        </div>
@@ -320,66 +329,29 @@
         <div class="right-col">
             <div class="profile-card">
                 <div class="profile-pic">
-                	<a>
+                	<a href="#">
 	                    <img src="${ctp}/images/noprofile.png" alt="내 프로필사진">
                 	</a>
                 </div>
                 <div>
-                    <p class="username">${sMid}</p>
+                    <p class="username"><a href="#">${sMid}</a></p>
                     <p class="sub-text">${sName}</p>
                 </div>
             </div>
             <p class="suggestion-text">회원님을 위한 추천</p>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png" alt="">
-                </div>
-                <div>
-                    <p class="username">추천인아이디</p>
-                    <p class="sub-text">팔로워 이름</p>
-                </div>
-                <button class="action-btn">팔로우</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png" alt="">
-                </div>
-                <div>
-                    <p class="username">추천인아이디</p>
-                    <p class="sub-text">팔로워 이름</p>
-                </div>
-                <button class="action-btn">팔로우</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png" alt="">
-                </div>
-                <div>
-                    <p class="username">추천인아이디</p>
-                    <p class="sub-text">팔로워 이름</p>
-                </div>
-                <button class="action-btn">팔로우</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png"  alt="">
-                </div>
-                <div>
-                    <p class="username">추천인아이디</p>
-                    <p class="sub-text">팔로워 이름</p>
-                </div>
-                <button class="action-btn">팔로우</button>
-            </div>
-            <div class="profile-card">
-                <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png" alt="">
-                </div>
-                <div>
-                    <p class="username">추천인아이디</p>
-                    <p class="sub-text">팔로워 이름</p>
-                </div>
-                <button class="action-btn">팔로우</button>
-            </div>
+            <!-- 추천인 아이디 출력 (최신 가입 회원) -->
+            <c:forEach var="mVo" items="${mVos}" varStatus="st">
+	            <div class="profile-card">
+	                <div class="profile-pic">
+	                    <a href="#"><img src="${ctp}/images/noprofile.png" alt=""></a>
+	                </div>
+	                <div>
+	                    <p class="username"><a href="#">${mVo.mid}</a></p>
+	                    <p class="sub-text">${mVo.name}</p>
+	                </div>
+	                <button class="action-btn float-right">팔로우</button>
+	            </div>
+            </c:forEach>
         </div>
     </div>
     </section>

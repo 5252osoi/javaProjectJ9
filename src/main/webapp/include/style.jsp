@@ -17,7 +17,11 @@ footer {
     height: 50px;
     margin-top: 150px; 
     width: 100%;
-
+}
+a:hover{
+	cursor:pointer;
+	color: #CCC;
+	text-decoration: none;
 }
 ::-webkit-scrollbar{
     width: 8px;
@@ -334,6 +338,7 @@ i {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom:0;
 }
 
 .comment-wrapper .icon{

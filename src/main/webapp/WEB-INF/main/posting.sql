@@ -21,13 +21,28 @@ create table postReply (
 	idx     	int not null auto_increment,	/* 댓글의 고유번호 */
 	postIdx		int not null,					/* 원본글(부모글)의 고유번호(외래키로 설정) */
 	mid			varchar(30) not null,			/* 댓글 올린이의 아이디 */
-	nickName	varchar(30) not null,			/* 댓글 올린이의 닉네임 */
-	wDate		datetime default now(),			/* 댓글 올린 날짜 */
 	hostIp		varchar(50) not null,			/* 댓글 올린 PC의 고유 IP */
 	content		text not null,					/* 댓글 내용 */  
+	wDate		datetime default now(),			/* 댓글 올린 날짜 */
+	likes		int default 0,
 	primary key(idx),
 	foreign key(postIdx) references posting(idx)
 	on update cascade							/* 부모필드를 수정하면 함께 영향을 받는다. */
 	on delete restrict							/* 부모필를 함부로 삭제할수 없다. */
 );
 desc postReply;
+drop table postReply;
+
+SELECT
+    postReply.idx,
+    postReply.postIdx,
+    postReply.mid,
+    postReply.hostIp,
+    postReply.content,
+    postReply.likes,
+    postReply.wDate
+FROM postReply
+LEFT JOIN posting ON postReply.postIdx = posting.idx
+WHERE posting.idx IS NOT NULL  -- posting이 있는 경우에만 결과에 포함
+ORDER BY posting.idx desc, postReply.idx
+limit 0,5;

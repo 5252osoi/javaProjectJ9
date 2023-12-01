@@ -17,6 +17,7 @@ create table member(
 );
 drop table member;
 
+select * from member order by idx desc limit 0,5;
 
 desc member;
 select * from member;
