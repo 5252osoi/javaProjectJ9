@@ -15,7 +15,7 @@ public class PostUploadCommand implements PostingInterface {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String realPath = request.getServletContext().getRealPath("/images/sever_post_img");
+		String realPath = request.getServletContext().getRealPath("/images/severPostImg");
 		int maxSize = 1024 * 1024 * 30;	// 서버에 저장시킬 파일의 최대용량을 30MByte로 제한한다.(1회저장용량)
 		String encoding = "UTF-8";
 		// 파일 업로드 처리....(객체가 생성되면서 바로 파일이 업로드 처리된다.)

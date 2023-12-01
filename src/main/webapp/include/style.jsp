@@ -110,7 +110,15 @@ footer {
 	margin: 0 auto;
 	margin-bottom:10px;
 }
-
+.btn-light{
+	background-color: white;
+	border:none;
+}
+.btn-main{
+	margin:0;
+	padding:0;
+	text-align:center;
+}
 /*버튼 내부 폰트 사이즈*/
 
 .btntext{

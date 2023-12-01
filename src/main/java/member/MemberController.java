@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 @SuppressWarnings("serial")
 @WebServlet("*.in")
 public class MemberController extends HttpServlet{
@@ -28,10 +29,12 @@ public class MemberController extends HttpServlet{
 			viewPage = "/include/message.jsp";
 			
 		} else if(mid.equals("")) {
-			viewPage = request.getContextPath()+"/";
+			viewPage ="/index.jsp";
 			
 		} else if(com.equals("/ma")){
-			viewPage +="/main.jsp";
+			command=new MainPagingCommand();
+			command.execute(request, response);
+			viewPage ="/mainPage/main.jsp";
 			
 		} else if(com.equals("/jo")){
 			viewPage +="/join.jsp";

@@ -24,18 +24,27 @@ public class PostingController extends HttpServlet{
 		String mid = session.getAttribute("sMid")==null? "" : (String)session.getAttribute("sMid");
 		
 		if(com.equals("/postUpload")){
-		command=new PostUploadCommand();
-		command.execute(request, response);
-		viewPage = "/include/message.jsp";
-		}
+			command=new PostUploadCommand();
+			command.execute(request, response);
+			viewPage = "/include/message.jsp";
 		
-		/*
-		} else if(mid.equals("")) {
-			request.getRequestDispatcher("/").forward(request, response);
+		} else if(com.equals("/scrollPage")){
+			command=new PostingScrollPageCommand();
+			command.execute(request, response);
+			viewPage = "/mainPage/scrollPage.jsp";
 			
-		} else if(com.equals("/ma")){
-			viewPage +="/main.jsp";
+		} else if(com.equals("/postEdit")){
+			command=new PostEditCommand();
+			command.execute(request, response);
+			viewPage = "/include/message.jsp";
 			
+			
+		} else if(com.equals("/postDelete")){
+			command=new PostdeleteCommand();
+			command.execute(request, response);
+			return;
+			
+		/*	
 		} else if(com.equals("/jo")){
 			viewPage +="/join.jsp";
 			
@@ -53,9 +62,9 @@ public class PostingController extends HttpServlet{
 			command=new MemberLogoutCommand();
 			command.execute(request, response);
 			viewPage = "/include/message.jsp";
-			
+		*/	
 		} 
-		*/
+		
 		request.getRequestDispatcher(viewPage).forward(request, response);
 	}
 }

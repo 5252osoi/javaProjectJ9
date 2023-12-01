@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<% pageContext.setAttribute("newLine","\n"); %>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,47 @@
 	<!---->
 	<script>
 		'use strict';
+		
+		//현재 스크롤 위치 저장
+		let lastScroll = 0;
+		let curPage = 1;
+		//무한스크롤 
+		$(document).scroll(function(e){
+		   
+		    var currentScroll = $(this).scrollTop();					//현재 높이 저장
+		    var documentHeight = $(document).height();					//전체 문서의 높이
+		    var nowHeight = $(this).scrollTop() + $(window).height();	//(현재 화면상단 + 현재 화면 높이)
+		    
+		    //스크롤이 아래로 내려갔을때만 해당 이벤트 진행.
+		    if(currentScroll > lastScroll){
+		        //nowHeight을 통해 현재 화면의 끝이 어디까지 내려왔는지 파악가능 
+		        //즉 전체 문서의 높이에 일정량 근접했을때 글 더 불러오기)
+		        if(documentHeight < (nowHeight + (documentHeight*0.1))){
+		            console.log("다음 페이지 가져오기");
+		            curPage++;
+		            getList(curPage);
+		        }
+		    }
+		    //현재위치 최신화
+		    lastScroll = currentScroll;
+		});
+		// 스크롤 했을때 다음 리스트 불러오기
+		function getList(curPage) {
+			$.ajax({
+				type: "post",
+				url : "scrollPage.po",
+				data :{	"curPage" 		: curPage,
+						"order" 		: "scrollPage"},
+				success:function(res){
+		        	//서버에서 전송된 데이터를 nextPost 에 추가하기
+					$("#nextPost").append(res);
+				},
+				error : function(){
+	                alert("불러오기 실패");
+	            }
+			});
+		}
+		
 	    function fCheck() {
 	    	let fName = document.getElementById("file").value;
 	    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
@@ -39,7 +82,8 @@
 	    	}
 	    	
 	    }
-		
+
+	    
 
 		//모달 내부에서 파일넣기 버튼을 누르면 hidden속에있는 파일 버튼넣어짐
 		function clickFilebtn(){
@@ -93,6 +137,73 @@
 	    		}
 	    	});
 	    });
+	    function editPost(idx,content) {
+	    	$("#edit-modal #idx").val(idx);
+	    	$("#edit-modal #content").val(content);
+	    	console.log(idx);
+	    } 
+	    
+	    
+	    function editSubmit(){
+			document.getElementById("editForm").submit();
+	    }
+	    
+	    
+	    //포스트 삭제
+	    function deletePost(idx){
+	    	let ans = confirm("이 게시물을 삭제하시겠어요?");
+	    	if(!ans) return false;
+	    	$.ajax({
+	    		url  : "postDelete.po",
+	    		type : "post",
+	    		data : {idx : idx},
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("포스트를 삭제했습니다.");
+	    				location.reload();
+	    			}
+	    			else alert("포스트삭제실패ㅋㅋ");
+	    		},
+	    		error : function() {
+	    			alert("전송 오류!!");
+	    		}
+	    	});
+	    }
+	    
+	    //댓글달기
+	    function replyCheck() {
+	    	let content = $(".comment-box").val();
+	    	if(content.trim() == "") {
+	    		alert("댓글을 입력하세요!");
+	    		$("#content").focus();
+	    		return false;
+	    	}
+	    	let query = {
+	    			boardIdx  : ${vo.idx},
+	    			mid				: '${sMid}',
+	    			nickName	: '${sNickName}',
+	    			hostIp		: '${pageContext.request.remoteAddr}',
+	    			content		: content
+	    	}
+	    	
+	    	$.ajax({
+	    		url  : "boardReplyInput.bo",
+	    		type : "post",
+	    		data : query,
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("댓글이 입력되었습니다.");
+	    				location.reload();
+	    			}
+	    			else {
+	    				alert("댓글 입력 실패~~");
+	    			}
+	    		},
+	    		error : function() {
+	    			alert("전송오류!!");
+	    		}
+	    	});
+	    }
 	    
 	</script>
 	<style>
@@ -124,81 +235,94 @@
             <div class="left-col">
                 <div class="status-wrapper">
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user1</p>
                     </div>
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user2</p>
                     </div>
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user3</p>
                     </div>
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user4</p>
                     </div>
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user5</p>
                     </div>
                     <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
+                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
                         <p class="username">user6</p>
                     </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="#" alt=""></div>
-                        <p class="username">user7</p>
-                    </div>
+                    
                 </div>
                 
                 <!-- First Post -->
-                <div class="post">
-		            <div class="info">
-		                <div class="user">
-		                    <div class="profile-pic">
-		                        <img src="#" alt="photo">
-		                    </div>
-		                    <p class="username">user</p>
-		                </div>
-		                <!-- Edit Delete -->
-		                <div class="dropdown">
-		                    <a class="dropdown-toggle" href="#" data-bs-toggle="dropdown">
-		                        <i class="fas fa-ellipsis-h"></i>
-		                    </a>
-		                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-		                      <li><a data-bs-toggle="modal" data-bs-target="#edit-modal" class="dropdown-item post_edit" href="#">Edit</a></li>
-		                      <li><a class="dropdown-item post_delete" href="#">Delete</a></li>
-		                    </ul>
-		                  </div>
-		            </div>
-		            <img src="" class="post-image" alt="">
-		            <div class="post-content">
-		                <div class="reaction-wrapper">
-		                    <i class="ri-heart-line mr-2"></i>
-		                   	<i class="ri-chat-3-line mr-2"></i>
-		                    <i class="ri-send-plane-2-line mr-2"></i>
-		                    <i class="ri-bookmark-line"></i>
-		                </div>
-		                <p class="likes text-start">좋아요</p>
-		                <p class="description"><span></span></p>
-		                <p class="post-time"></p>
-		            </div>
-		            <div class="comment-wrapper">
-		                <img src="#" class="icon" alt="">
-		                <input type="text" class="comment-box" placeholder="댓글 달기...">
-		                <button class="comment-btn"><b>게시</b></button>
-		            </div>
+                <div id="nextPost">
+                	<c:forEach var="vo" items="${vos}" varStatus="st">
+		            	<div class="post">
+				            <div class="info">
+				                <div class="user">
+				                    <div class="profile-pic">
+				                        <img src="${ctp}/images/noprofile.png" alt="photo">
+				                    </div>
+				                    <p class="username">${vo.mid}</p>
+				                </div>
+				                <!-- 작성자아이디 = 세션아이디 일때 수정,삭제기능 -->
+				                <c:if test="${sMid==vo.mid || sMid=='admin'}">
+					                <div class="dropdown dropright">
+					                    <button class="btn btn-main btn-light btn-sm dropdown-toggle" data-toggle="dropdown">
+					                        <i class="ri-more-fill m-0 p-0"></i>
+					                    </button>
+					                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink"  style="width:50px;">
+					                    	<c:if test="${sMid==vo.mid}">
+							                    <li><button data-toggle="modal" data-target="#edit-modal" onclick="editPost('${vo.idx}','${vo.content}')" class="dropdown-item post_edit">수정</button></li>
+					                    	</c:if>
+						                    <li><a class="dropdown-item post_delete" href="javascript:deletePost(${vo.idx})">삭제</a></li>
+					                    </ul>
+					                </div>
+				                </c:if>
+				                <!--  -->
+				            </div>
+				            <img src="${ctp}/images/severPostImg/${vo.fSName}" style="object-fit:contain"class="post-image" alt="${vo.fName}">
+				            <div class="post-content">
+				                <div class="reaction-wrapper d-flex">
+				     				<button class="btn btn-sm btn-light btn-main"><i class="ri-heart-line m-1"></i></button>
+				                    <button class="btn btn-sm btn-light btn-main"><i class="ri-chat-3-line m-1"></i></button>
+				                    <button class="btn btn-sm btn-light btn-main"><i class="ri-send-plane-2-line m-1"></i></button>
+					                <button class="btn btn-sm btn-light btn-main ml-auto"><i class="ri-bookmark-line m-1"></i></button>
+				                </div>
+				                <p class="likes text-start"><c:if test="${vo.likes!=0}">좋아요 ${vo.likes}개</c:if></p>
+				                <p class="description">${fn:replace(vo.content,newLine,'<br/>')}</p>
+				                <p class="post-time"></p>
+				            </div>
+				            <div class="comment-wrapper">
+				                <img src="#" class="icon" alt="">
+				                <form name="comment-form">
+					                <input type="text" class="comment-box" placeholder="댓글 달기...">
+					                <button class="comment-btn" onclick="replyCheck(${vo.idx})"><b>게시</b></button>
+				                </form>
+				            </div>
+			        		<hr/>
+			        	</div>
+                	</c:forEach>
 		        </div>
+		        <!-- 새로운 글 추가 -->
             </div>
+            
     <!-- Story Section End -->
 
     <!-- right Sidebar Section Start --> 
         <div class="right-col">
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="${ctp}/images/noprofile.png" alt="내 프로필사진">
+                	<a>
+	                    <img src="${ctp}/images/noprofile.png" alt="내 프로필사진">
+                	</a>
                 </div>
                 <div>
                     <p class="username">${sMid}</p>
@@ -208,7 +332,7 @@
             <p class="suggestion-text">회원님을 위한 추천</p>
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="#" alt="">
+                    <img src="${ctp}/images/noprofile.png" alt="">
                 </div>
                 <div>
                     <p class="username">추천인아이디</p>
@@ -218,7 +342,7 @@
             </div>
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="#" alt="">
+                    <img src="${ctp}/images/noprofile.png" alt="">
                 </div>
                 <div>
                     <p class="username">추천인아이디</p>
@@ -228,7 +352,7 @@
             </div>
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="#" alt="">
+                    <img src="${ctp}/images/noprofile.png" alt="">
                 </div>
                 <div>
                     <p class="username">추천인아이디</p>
@@ -238,7 +362,7 @@
             </div>
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="#"  alt="">
+                    <img src="${ctp}/images/noprofile.png"  alt="">
                 </div>
                 <div>
                     <p class="username">추천인아이디</p>
@@ -248,7 +372,7 @@
             </div>
             <div class="profile-card">
                 <div class="profile-pic">
-                    <img src="#" alt="">
+                    <img src="${ctp}/images/noprofile.png" alt="">
                 </div>
                 <div>
                     <p class="username">추천인아이디</p>
@@ -318,18 +442,31 @@
     <!-- Edit Modal -->
 
    	<div class="modal fade" id="edit-modal">
+   		<span>
+	        <button type="button" class="close m-4 modal_close" data-dismiss="modal"><font size="15pt" color="#fff">&times;</font></button>
+        </span>
 	    <div class="modal-dialog modal-dialog-centered">
-	        <div class="modal-content">
+	        <div class="modal-content"  style="height:500px">
 	            <div class="modal-header">
-	                <h2>Edit Your Post</h2>
-	                <button class="btn-close" data-bs-dismiss="modal"></button>
+	                <font size="3pt" class="modal-title col-12 text-center"><b>내용 수정</b></font>
 	            </div>
 	            <div class="modal-body">
-	                <div class="msg"></div>
-	                <form action="" id="edit_post">
-	                    
-	                </form>
-	            </div>
+                    <form id="editForm" method="post" action="postEdit.po">
+                  		<div class="profile-card">
+			                <div class="profile-pic">
+			                    <img src="${ctp}/images/noprofile.png" alt="내 프로필사진">
+			                </div>
+			                <div>
+			                    <p class="username">${sMid}</p>
+			                    <p class="sub-text">${sName}</p>
+			                </div>
+			            </div>
+						<textarea rows="10" name="content" id="content" placeholder="내용을 입력하세요..." class="form-control" style="resize:none; border:none;"></textarea>
+						<input type="hidden" name="idx" id="idx" />
+                       	<div class="hr-sect"><b>준비되셨나요?</b></div>
+                       	<button onclick="editSubmit()" class="btn btn-light float-right d-inline-flex align-items-center"><i class="ri-upload-2-fill" title="수정하기"></i><span class="btntext ml-2">수정하기</span></button>
+                    </form>
+                </div>
 	        </div>
 	    </div>
   	</div>
