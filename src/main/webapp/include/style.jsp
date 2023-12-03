@@ -169,7 +169,6 @@ i {
 	height:100%;
 }
 /*메인화면css*/
-
 .main {
     width: 100%;
     padding: 40px 0;

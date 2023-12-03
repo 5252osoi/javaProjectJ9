@@ -33,3 +33,4 @@ create table IDPhoto(
 	on update cascade							/* 부모필드를 수정하면 함께 영향을 받는다. */
 	on delete restrict	
 );
+drop table IDPhoto;

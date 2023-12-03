@@ -48,25 +48,20 @@ public class PostingController extends HttpServlet{
 			command.execute(request, response);
 			return;
 			
-		/*	
-		} else if(com.equals("/jo")){
-			viewPage +="/join.jsp";
-			
-		} else if(com.equals("/idCheck")){
-			command=new IdCheckCommand();
+		} else if(com.equals("/postReplyDelete")){
+			command=new PostReplyDeleteCommand();
 			command.execute(request, response);
 			return;
 			
-		} else if(com.equals("/memberJo")){
-			command=new MemberJoinCommand();
+		} else if(com.equals("/likePlus")){
+			command=new PostlikePlusCommand();
 			command.execute(request, response);
-			viewPage = "/include/message.jsp";
+			return;
 			
-		} else if(com.equals("/logout")){
-			command=new MemberLogoutCommand();
+		} else if(com.equals("/likeMinus")){
+			command=new PostlikeMinusCommand();
 			command.execute(request, response);
-			viewPage = "/include/message.jsp";
-		*/	
+			return;
 		} 
 		
 		request.getRequestDispatcher(viewPage).forward(request, response);

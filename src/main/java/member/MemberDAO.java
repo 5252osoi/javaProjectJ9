@@ -82,11 +82,42 @@ public class MemberDAO {
 			}
 		return res;
 	}
-	public ArrayList<MemberVO> getRecommendUser() {
+	public ArrayList<MemberVO> getRecommendUser(String sMid) {
 		ArrayList<MemberVO> vos = new ArrayList<>();
 		try {
-			sql="select * from member order by idx desc limit 0,5";
+			sql="select * from member where mid!=? order by idx desc limit 0,5";
 			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, sMid);
+			rs=pstmt.executeQuery();
+			while(rs.next()) {
+				vo = new MemberVO();
+				vo.setIdx(rs.getInt("idx"));
+				vo.setMid(rs.getString("mid"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setName(rs.getString("name"));
+				vo.setEmail(rs.getString("email"));
+				vo.setTel(rs.getString("tel"));
+				vo.setPr(rs.getString("pr"));
+				vo.setUserInfor(rs.getString("userInfor"));
+				vo.setUserDel(rs.getString("userDel"));
+				vo.setPost(rs.getInt("post"));
+				vo.setFollow(rs.getInt("follow"));
+				vo.setFollower(rs.getInt("follower"));
+				vos.add(vo);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQL오류 "+e.getMessage());
+		} finally {
+			rsClose();
+		}
+		return vos;
+	}
+	public ArrayList<MemberVO> getRanRecommendUser(String sMid) {
+		ArrayList<MemberVO> vos = new ArrayList<>();
+		try {
+			sql="select * from member where mid!=? order by idx desc,rand() limit 7";
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, sMid);
 			rs=pstmt.executeQuery();
 			while(rs.next()) {
 				vo = new MemberVO();

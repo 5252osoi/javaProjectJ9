@@ -43,11 +43,11 @@
     <div class="container mt-3 personalPage">
         <!-- 프로필 정보 -->
         <div class="row">
-            <div class="col-md-4 personalPageProfile-pic">
+            <div class="col-4 personalPageProfile-pic">
                 <!-- 프로필 사진 -->
                 <img src="#" alt="Profile Picture" >
             </div>
-            <div class="col-md-8">
+            <div class="col-8">
                 <!-- 사용자 정보 (예: 이름, 아이디 등) -->
                 <div class="row">
 	                <h2>User Name</h2>
@@ -65,7 +65,7 @@
 		<div class="p-5 m-5"></div>
 		<hr/>
         <!-- 게시물 목록 -->
-        <div class="row mt-4">
+        <div class="row mt-4 d-grid gap-3">
             <div class="col-md-4">
                 <!-- 첫 번째 게시물 -->
                 <img src="#" alt="Post 1" class="img-fluid">

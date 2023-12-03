@@ -14,6 +14,9 @@ public class MemberVO {
 	private int follow;
 	private int follower;
 	
+	private String IDPhotofName;
+	private String IDPhotofSName;
+	
 	public int getIdx() {
 		return idx;
 	}
@@ -86,12 +89,24 @@ public class MemberVO {
 	public void setFollower(int follower) {
 		this.follower = follower;
 	}
+	public String getIDPhotofName() {
+		return IDPhotofName;
+	}
+	public void setIDPhotofName(String iDPhotofName) {
+		IDPhotofName = iDPhotofName;
+	}
+	public String getIDPhotofSName() {
+		return IDPhotofSName;
+	}
+	public void setIDPhotofSName(String iDPhotofSName) {
+		IDPhotofSName = iDPhotofSName;
+	}
 	@Override
 	public String toString() {
 		return "MemberVO [idx=" + idx + ", mid=" + mid + ", pwd=" + pwd + ", name=" + name + ", email=" + email
 				+ ", tel=" + tel + ", pr=" + pr + ", userInfor=" + userInfor + ", userDel=" + userDel + ", post=" + post
-				+ ", follow=" + follow + ", follower=" + follower + "]";
+				+ ", follow=" + follow + ", follower=" + follower + ", IDPhotofName=" + IDPhotofName
+				+ ", IDPhotofSName=" + IDPhotofSName + "]";
 	}
-	
 	
 }

@@ -57,6 +57,11 @@
 			});
 		}
 		
+		//새로고침했을때 마지막 스크롤바가 있던 위치로 가기
+		window.addEventListener("load", function() {
+            window.scrollTo(0, lastScroll);
+        });
+		
 	    function fCheck() {
 	    	let fName = document.getElementById("file").value;
 	    	let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
@@ -66,24 +71,16 @@
 	    		alert("업로드할 파일을 선택하세요!");
 	    		return false;
 	    	}
-	    	
 	    	let fileSize = document.getElementById("file").files[0].size;
-	    	
 	    	$('#fileSize').val(fileSize);
-	    	
-	    	if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'zip' && ext != 'hwp' && ext != 'ppt' && ext != 'pptx' && ext != 'xlsx') {
-	    		alert("업로드 가능한 파일은 'jgp/gif/png/zip/hwp/ppt/pptx/xlsx' 만 가능합니다.");
-	    	}
-	    	else if(fileSize > maxSize) {
+	    	if(ext != 'jpg' && ext != 'gif' && ext != 'png') {
+	    		alert("업로드 가능한 파일은 'jgp/gif/png/' 만 가능합니다.");
+	    	} else if(fileSize > maxSize) {
 	    		alert("업로드할 파일의 최대용량은 30MByte입니다.");
-	    	}
-	    	else {
+	    	} else {
 	    		myform.submit();
 	    	}
-	    	
 	    }
-
-	    
 
 		//모달 내부에서 파일넣기 버튼을 누르면 hidden속에있는 파일 버튼넣어짐
 		function clickFilebtn(){
@@ -203,6 +200,61 @@
 	    	});
 	    } 
 	    
+	    //댓글삭제
+	    function deleteReply(idx){
+	    	let ans = confirm("이 댓글을 삭제하시겠어요?")
+	    	if(!ans)return false;
+	    	$.ajax({
+	    		url  : "postReplyDelete.po",
+	    		type : "post",
+	    		data : {idx : idx},
+	    		success:function(res) {
+	    			if(res == "1") {
+	    				alert("댓글을 삭제했습니다.");
+	    				location.reload();
+	    			}
+	    			else alert("댓글삭제실패ㅋㅋ");
+	    		},
+	    		error : function() {
+	    			alert("전송 오류!!");
+	    		}
+	    	});
+	    }
+	    //좋아요 누르기 (게시글)
+		function likePlus(idx) {
+	    	$.ajax({
+	    		url  : "likePlus.po",
+	    		type : "post",
+	    		data : {idx : idx,
+	    				mid : '${sMid}'
+	    		},
+	    		success:function(res) {
+	    			if(res == "0") alert('좋아요실패ㅋㅋ싫어요ㅋㅋ');
+	    			else location.reload();
+	    		},
+	    		error : function() {
+	    			alert("전송 오류!!");
+	    		}
+	    	});
+	    }
+  		//좋아요 한번 더 누르기(게시글)
+	  	function likeMinus(idx) {
+	    	$.ajax({
+	    		url  : "likeMinus.po",
+	    		type : "post",
+	    		data : {idx : idx,
+	    				mid : '${sMid}'
+	    		},
+	    		success:function(res) {
+	    			if(res == "0") alert('싫어요실패ㅋㅋ좋아요ㅋㅋ.');
+	    			else location.reload();
+	    		},
+	    		error : function() {
+	    			alert("전송 오류!!");
+	    		}
+	    	});
+	    }
+  		
 	</script>
 	<style>
 	/*스토리 뜨는곳 625px(고정), 포스트 올라가는 곳 470px(고정), 우측푸터는 300px(1160px미만일때 없어짐,좌측 마진으로 고정됨) */
@@ -232,31 +284,13 @@
         <div class="wrapper" id="s1160">
             <div class="left-col">
                 <div class="status-wrapper">
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user1</p>
-                    </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user2</p>
-                    </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user3</p>
-                    </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user4</p>
-                    </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user5</p>
-                    </div>
-                    <div class="status-card">
-                        <div class="profile-pic"><img src="${ctp}/images/noprofile.png" alt=""></div>
-                        <p class="username">user6</p>
-                    </div>
-                    
+                	<!-- 회원추천(랜덤회원 7명) -->
+                	<c:forEach var="rmVo" items="${rmVos}">
+	                    <div class="status-card">
+	                        <div class="profile-pic"><a class="showMD" href="#"><img src="${ctp}/images/noprofile.png" alt=""></a></div>
+	                        <p class="username"><a href="#">${rmVo.mid}</a></p>
+	                    </div>
+                	</c:forEach>
                 </div>
                 
                 <!-- First Post -->
@@ -287,30 +321,49 @@
 				                <!--  -->
 				            </div>
 				            <img src="${ctp}/images/severPostImg/${vo.fSName}" style="object-fit:contain"class="post-image" alt="${vo.fName}">
-				            <div class="post-content">
+				            <div class="post-content p-0 mt-4">
 				                <div class="reaction-wrapper d-flex">
-				     				<button class="btn btn-sm btn-light btn-main"><i class="ri-heart-line m-1"></i></button>
-				                    <button class="btn btn-sm btn-light btn-main"><i class="ri-chat-3-line m-1"></i></button>
-				                    <button class="btn btn-sm btn-light btn-main"><i class="ri-send-plane-2-line m-1"></i></button>
+				                	<!-- 좋아요버튼 -->
+				                	<c:set var="like" value="false"/>
+				                	<c:forEach var="lVo" items="${lVos}">
+				                		<!-- lVo(좋아요에있는 postIDX와 게시글의 IDX가 같으면 like=true 로 체크) -->
+				                		<c:if test="${vo.idx==lVo.postIdx}">
+					                		<c:set var="like" value="true"/>
+				                		</c:if>
+				                	</c:forEach>
+				     				<c:if test="${like eq false}">
+					     				<button class="btn btn-sm btn-light btn-main" onclick="likePlus(${vo.idx})"><i class="ri-heart-line m-1"></i></button>
+				     				</c:if>
+				     				<c:if test="${like eq true}">
+					     				<button class="btn btn-sm btn-light btn-main" onclick="likeMinus(${vo.idx})"><font color="red"><i class="ri-heart-fill m-1"></i></font></button>
+				     				</c:if>
+				                    
+				                    <button class="btn btn-sm btn-light btn-main" onclick="replyCheck(${vo.idx})"><i class="ri-chat-3-line m-1"></i></button>
+				                    <button class="btn btn-sm btn-light btn-main"><div id="animated_div"><i class="ri-send-plane-2-line m-1"></i></div></button>
 					                <button class="btn btn-sm btn-light btn-main ml-auto"><i class="ri-bookmark-line m-1"></i></button>
 				                </div>
-				                <p class="likes text-start"><c:if test="${vo.likes!=0}">좋아요 ${vo.likes}개</c:if></p>
+				                <p class="likes text-start"><c:if test="${vo.likes!=0}">좋아요 ${vo.likes} 개</c:if></p>
 					            <span class="description">
 					            	<a href="#"><b>${vo.mid}</b></a>
 					            	${fn:replace(vo.content,newLine,'<br/>')}
 					            </span>
 				                <p class="post-time">${fn:substring(vo.wDate,0,11)}</p>
+				                <div class="w-100"></div>
+					            <!-- 댓글은 해당 글의 idx와 댓글VO의 postIdx가 같으면 출력되게끔 작성 -->
+				            	<c:forEach var="rVo" items="${rVos}">
+				            		<c:if test="${rVo.postIdx==vo.idx}">
+				            		<!-- 댓글 -->
+					            		<div class="description w-100 p-0 m-0">
+				            				<a href="#"><b>${rVo.mid}</b></a>
+				            				${fn:replace(rVo.content,newLine,'<br/>')}
+				            				<!-- 댓글 삭제권한 (댓글작성자,게시글작성자,운영자) -->
+				            				<c:if test="${sMid==vo.mid || sMid=='admin' || sMid==rVo.mid}">
+				            					<a class="float-right" href="javascript:deleteReply(${rVo.idx})">&times;</a>
+				            				</c:if>
+					            		</div>
+				            		</c:if>
+				            	</c:forEach>
 				            </div>
-				            <!-- 댓글은 해당 글의 idx와 댓글VO의 postIdx가 같으면 출력되게끔 작성 -->
-			            	<c:forEach var="rVo" items="${rVos}">
-			            		<c:if test="${rVo.postIdx==vo.idx}">
-			            		<!-- 댓글 -->
-				            		<div class="description col-12">
-			            				<a href="#"><b>${rVo.mid}</b></a>
-			            				${fn:replace(rVo.content,newLine,'<br/>')}
-				            		</div>
-			            		</c:if>
-			            	</c:forEach>
 				            	<!-- 댓글입력 -->
 				            <div class="comment-wrapper">
 					            <input type="text" class="comment-box" id="comment${vo.idx}" placeholder="댓글 달기...">
@@ -329,9 +382,10 @@
         <div class="right-col">
             <div class="profile-card">
                 <div class="profile-pic">
-                	<a href="#">
-	                    <img src="${ctp}/images/noprofile.png" alt="내 프로필사진">
+                	<a id="profile-pic-onclick" href="#">
+	                    <img src="${ctp}/images/noprofile.png" title="프로필 사진을 변경하려면 클릭하세요" alt="내 프로필사진">
                 	</a>
+                	<input type="hidden" id="profileID" value="${sMid}">
                 </div>
                 <div>
                     <p class="username"><a href="#">${sMid}</a></p>
@@ -349,7 +403,7 @@
 	                    <p class="username"><a href="#">${mVo.mid}</a></p>
 	                    <p class="sub-text">${mVo.name}</p>
 	                </div>
-	                <button class="action-btn float-right">팔로우</button>
+	                <button class="action-btn float-right" onclick="alert('준비중이에요ㅠ')">팔로우</button>
 	            </div>
             </c:forEach>
         </div>
@@ -443,7 +497,6 @@
 	    </div>
   	</div>
 	<!-- Edit Modal End -->	
-	
 
 </body>
 </html>

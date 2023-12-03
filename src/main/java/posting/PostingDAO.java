@@ -194,4 +194,92 @@ public class PostingDAO {
 			}
 			return rVos;
 		}
+		//댓글 삭제
+		public int setPostReplyDelete(int idx) {
+			int res=0;
+			try {
+				sql="delete from postReply where idx=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, idx);
+				res = pstmt.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println("SQL 오류 : " + e.getMessage());
+			} finally {
+				pstmtClose();
+			}
+			return res;
+		}
+		//좋아요++
+		public int setPostLikePlus(int idx, String mid) {
+			int res=0;
+			try {
+				sql = "insert into postLike values(default,?,?,default)";
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setInt(1, idx);
+				pstmt.setString(2, mid);
+				res=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println("SQL 오류 : " + e.getMessage());
+			} finally {
+				pstmtClose();
+			}
+			return res;
+		}
+		//해당 게시글이 좋아요 상태인지 아닌지 체크
+		public ArrayList<PostLikeVO> getCheckLike(int startIdxNo, int pageSize, String sMid) {
+			ArrayList<PostLikeVO> vos=new ArrayList<PostLikeVO>();
+			try {
+				sql = "select l.idx as idx, l.postIdx as postIdx, l.mid as "+
+						"mid from posting p "+
+						"left join postLike l on p.idx = l.postIdx "+
+						"and l.mid = ? order by p.idx desc limit ?, ?";
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1, sMid);
+				pstmt.setInt(2, startIdxNo);
+				pstmt.setInt(3, pageSize);
+				rs=pstmt.executeQuery();
+				while(rs.next()) {
+					PostLikeVO vo = new PostLikeVO();
+					vo.setIdx(rs.getInt("idx"));
+					vo.setPostIdx(rs.getInt("postIdx"));
+					vo.setMid(rs.getString("mid"));
+					vos.add(vo);
+				}
+			} catch (SQLException e) {
+				System.out.println("SQL구문 오류 : " + e.getMessage());
+			} finally {
+				rsClose();
+			}
+			return vos;
+		}
+		public int setPostlikeMinus(int postIdx, String mid) {
+			int res=0;
+			try {
+				sql="delete from postLike where postIdx = ? and mid = ?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1, postIdx);
+				pstmt.setString(2, mid);
+				res=pstmt.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println("SQL 오류 : " + e.getMessage());
+			} finally {
+				pstmtClose();
+			}
+			return res;
+		}
+		//포스트의 좋아요 갯수 = 해당 게시물의 postidx를 가지고있는 postlike테이블의 데이터 수
+		public void setEditLikes() {
+			try {
+				sql="update posting p set p.likes=( "+
+						"select count(l.idx) "+
+						"from postLike l "+
+						"where l.postIdx=p.idx)";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.executeUpdate();
+			} catch (SQLException e) {
+				System.out.println("SQL 오류 : " + e.getMessage());
+			} finally {
+				pstmtClose();
+			}
+		}
 }
