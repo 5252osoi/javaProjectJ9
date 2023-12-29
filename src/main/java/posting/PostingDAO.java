@@ -141,6 +141,7 @@ public class PostingDAO {
 			}
 			return res;
 		}
+		//게시글에 있는 댓글 출력
 		public ArrayList<PostReplyVO> getReplyList(int[] postIdxArr) {
 			ArrayList<PostReplyVO> rVos = new ArrayList<>();
 		//	String in="";
@@ -229,8 +230,8 @@ public class PostingDAO {
 		public ArrayList<PostLikeVO> getCheckLike(int startIdxNo, int pageSize, String sMid) {
 			ArrayList<PostLikeVO> vos=new ArrayList<PostLikeVO>();
 			try {
-				sql = "select l.idx as idx, l.postIdx as postIdx, l.mid as "+
-						"mid from posting p "+
+				sql = "select l.idx as idx, l.postIdx as postIdx, l.mid as mid "+
+						"from posting p "+
 						"left join postLike l on p.idx = l.postIdx "+
 						"and l.mid = ? order by p.idx desc limit ?, ?";
 				pstmt=conn.prepareStatement(sql);

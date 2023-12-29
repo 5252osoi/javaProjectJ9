@@ -31,7 +31,7 @@ create table postReply (
 	on delete restrict							/* 부모필를 함부로 삭제할수 없다. */
 );
 desc postReply;
-drop table postReply;
+drop table postReply;  
 
 /* 게시글에 좋아요 만들기*/
 create table postLike (
